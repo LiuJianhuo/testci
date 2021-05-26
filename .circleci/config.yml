@@ -13,8 +13,8 @@ defaults: &defaults
     - image: cimg/node:15.1
   
 step_install_deps: &install_deps
-  - node/install-packages:
-      pkg-manager: yarn 
+  node/install-packages:
+    pkg-manager: yarn
 
 jobs:
   test:
@@ -22,17 +22,17 @@ jobs:
     steps:
       - checkout
       - *install_deps
-      run:
-        name: Test
-        command: yarn -v
+      - run:
+          name: Test
+          command: yarn -v
   build:
     <<: *defaults 
     steps:
       - checkout
       - *install_deps
-      run:
-        name: Build
-        command: yarn build
+      - run:
+          name: Build
+          command: yarn build
 
 workflows:
   ci: 
