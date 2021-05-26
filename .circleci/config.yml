@@ -11,25 +11,40 @@ orbs:
 defaults: &defaults
   docker:
     - image: cimg/node:15.1
-  
+
+step_restore_cache: &restore_cache
+  restore_cache:
+    keys:
+      - v1-dependencies-{{ checksum "package.json" }}-1
+      - v1-dependencies-
+
 step_install_deps: &install_deps
   node/install-packages:
     pkg-manager: yarn
+step_save_cache: &save_cache
+  save_cache:
+    paths:
+      - node_modules
+    key: v1-dependencies-{{ checksum "package.json" }}-1
 
 jobs:
   test:
     <<: *defaults
     steps:
+      - *restore_cache
       - checkout
       - *install_deps
+      - *save_cache
       - run:
           name: Test
           command: yarn -v
   build:
     <<: *defaults 
     steps:
+      - *restore_cache
       - checkout
       - *install_deps
+      - *save_cache
       - run:
           name: Build
           command: yarn build
