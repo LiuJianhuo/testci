@@ -40,7 +40,7 @@ jobs:
           name: Test
           command: yarn -v
   build:
-    <<: *defaults 
+    <<: *defaults
     steps:
       - checkout
       - *restore_cache
@@ -53,5 +53,13 @@ jobs:
 workflows:
   ci: 
     jobs:
-      - test
-      - build
+      - test:
+        filters:
+          branches:
+            only:
+              - master
+      - build:
+        filters:
+          branches:
+            only:
+              - master
